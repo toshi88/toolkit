@@ -12,9 +12,9 @@ The included tools are:
 - [ ] Download a static file
 - [x] Get a random string of length n
 - [ ] Post JSON to a remote service
-- [ ] Create a directory, including all parent directories, if it does not already exist
-- [ ] Create a URL safe slug from a string
+- [x] Create a directory, including all parent directories, if it does not already exist
+- [x] Create a URL safe slug from a string
 
 ## Installation
 
-`go get -u github.com/toshi88/toolbox`
+`go get -u github.com/toshi88/toolkit`

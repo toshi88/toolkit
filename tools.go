@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -41,6 +42,7 @@ type UploadedFile struct {
 	FileSize         int64
 }
 
+// Upload a single file to supplied directory (creating directory and renaming file if requested)
 func (t *Tools) UploadOneFile(r *http.Request, uploadDir string, rename ...bool) (*UploadedFile, error) {
 	renameFile := true
 	if len(rename) > 0 {
@@ -55,6 +57,7 @@ func (t *Tools) UploadOneFile(r *http.Request, uploadDir string, rename ...bool)
 	return files[0], nil
 }
 
+// Upload files to supplied directory (creating directory and renaming files if requested)
 func (t *Tools) UploadFiles(r *http.Request, uploadDir string, rename ...bool) ([]*UploadedFile, error) {
 	renameFile := true
 	if len(rename) > 0 {
@@ -159,4 +162,18 @@ func (t *Tools) CreateDirIfNotExist(path string) error {
 		}
 	}
 	return nil
+}
+
+// Turn a supplied string into a url-safe string
+func (t *Tools) Slugify(s string) (string, error) {
+	if s == "" {
+		return "", errors.New("empty string not permitted")
+	}
+
+	var re = regexp.MustCompile(`[^a-z\d]+`)
+	slug := strings.Trim(re.ReplaceAllString(strings.ToLower(s), "-"), "-")
+	if len(slug) == 0 {
+		return "", errors.New("after removing unsafe characters, slug is zero length")
+	}
+	return slug, nil
 }
